@@ -1,4 +1,9 @@
-Entity = { x = 0, y = 0, moving = false }
+Entity = {
+  x = 64,
+  y = 32,
+  moving = false,
+  level = 0
+}
 
 function Entity:new (o)
   o = o or {}
@@ -18,7 +23,11 @@ end
 function Entity:CONSTANTS()
   return {
     MOVEMENT = 32,
-    MIN_X = 0,
-    MAX_X = 768
+    MOVE_PER_TICK = 2,
+    ANIMATION_DELAY = 32,
+    MIN_X = 64,
+    MIN_Y = 0,
+    MAX_X = 672,
+    MAX_Y = 480
   }
 end

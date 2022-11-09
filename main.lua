@@ -1,19 +1,20 @@
 require("alien")
+require("walls")
 require("falling_object")
 
 function checkMovement()
   if love.keyboard.isDown("right") then
-    x = x + 1
     for i=1, #aliens do
       aliens[i]:move_bug("right")
     end
   elseif love.keyboard.isDown("left") then
-    x = x - 1
     for i=1, #aliens do
       aliens[i]:move_bug("left")
     end
   elseif love.keyboard.isDown("up") then
-    y = y - 1
+    for i=1, #aliens do
+      aliens[i]:move_bug("up")
+    end
   elseif love.keyboard.isDown("down") then
     y = y + 1
   elseif love.keyboard.isDown("q") then
@@ -27,7 +28,7 @@ end
 
 function love.load()
   aliens = {}
-  x = 0
+  walls = Wall:load_walls()
   y = 0
   table.insert(aliens, Alien:new())
   for i=1, #aliens do
@@ -40,12 +41,19 @@ end
 
 function love.update()
   checkMovement()
+  for i=1, #aliens do
+    aliens[i]:update_bug()
+  end
   --recalculate_entities()
 end
 
 function love.draw()
   for i=1, #aliens do
     aliens[i]:draw_bug(bug_1)
+  end
+
+  for i=1, #walls do
+    walls[i]:draw_wall(i)
   end
   --love.graphics.print("Bug Location: "..a:get_x(), 660, 20)
 end
