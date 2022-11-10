@@ -33,7 +33,7 @@ function Alien:update_bug()
     if self.x == self:CONSTANTS().MIN_X then return end
     self.x = self.x - self:CONSTANTS().MOVE_PER_TICK
   elseif direction == "right" then
-    if self.x == self:CONSTANTS().MAX_X then return end
+    if self.x == self:CONSTANTS().MAX_X - (self:CONSTANTS().MOVEMENT * 2) then return end
     self.x = self.x + self:CONSTANTS().MOVE_PER_TICK
   elseif direction == "up" then
     if self.y == self:CONSTANTS().MAX_Y then return end

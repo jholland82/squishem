@@ -1,6 +1,7 @@
 require("alien")
+require("scaffold")
 require("walls")
-require("falling_object")
+-- require("falling_object")
 
 function checkMovement()
   if love.keyboard.isDown("right") then
@@ -27,15 +28,16 @@ function recalculate_entites()
 end
 
 function love.load()
+  print("Height: ", love.window.getMode())
   aliens = {}
-  walls = Wall:load_walls()
+  walls = Wall:new()
+  scaffold = Scaffold:new()
   y = 0
   table.insert(aliens, Alien:new())
   for i=1, #aliens do
     aliens[i]:load_images()
   end
 
-  fo = FallingObject:new()
   bug_1 = love.graphics.newImage("images/bug-1.png")
 end
 
@@ -52,8 +54,6 @@ function love.draw()
     aliens[i]:draw_bug(bug_1)
   end
 
-  for i=1, #walls do
-    walls[i]:draw_wall(i)
-  end
-  --love.graphics.print("Bug Location: "..a:get_x(), 660, 20)
+  walls:draw_walls()
+  scaffold:draw_scaffold()
 end
