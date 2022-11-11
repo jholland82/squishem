@@ -1,64 +1,55 @@
+-- Aliens are the primary enemies of the game.  There are 16 different enemy types as
+-- the user progresses through the levels.  As the enemy level increases they spawn as
+-- ghosts faster.  Enemies also become "smarter" as the player progresses
+--
+-- movement_type -- How the alien moves in relation to the character
+--   straight = moves across the building to the edge and returns
+--   random = moves for a block and then randomly chooses to go left or right
+--   follow = tries to stay directly above the enemy
+--   hover = stays near the enemy and closest pole the enemy can climb
 require("entity")
 
 Alien = Entity:new(x, y)
 
+function Alien:set_direction(dir)
+  self.direction = dir
+end
+
 function Alien:load_images()
-  print("Loading Alien")
-  frames = {}
-  table.insert(frames, love.graphics.newImage("images/bug-1a.png"))
-  table.insert(frames, love.graphics.newImage("images/bug-1b.png"))
-  current_frame = 1
-  current_movement = 0
-  moving = false
-  direction = nil
+  self.moving_frames = {}
+  table.insert(self.moving_frames, love.graphics.newImage("images/bug-1a.png"))
+  table.insert(self.moving_frames, love.graphics.newImage("images/bug-1c.png"))
+  table.insert(self.moving_frames, love.graphics.newImage("images/bug-1b.png"))
+  table.insert(self.moving_frames, love.graphics.newImage("images/bug-1c.png"))
+  self.current_frame = 1
+  self.current_movement = 0
+  self.moving = false
+  self.direction = nil
+  self.movement_type = "straight"
 end
 
-function Alien:draw_bug(bug)
-  love.graphics.draw(frames[current_frame], self.x, self.y, 0, 2, 2)
-end
-
-function Alien:move_bug(dir)
-  moving = moving and false or true
-  direction = dir
-end
-
-function Alien:update_bug()
-  -- Don't update bugs if they have no direction set
-  if direction == nil then
-    return
-  end
+function Alien:update_alien(tick_modifier)
+  self.pace = self:CONSTANTS().MOVE_PER_TICK * tick_modifier
 
   -- Move based on the direction of the bug
-  if direction == "left" then
+  if self.direction == "left" then
     if self.x == self:CONSTANTS().MIN_X then return end
-    self.x = self.x - self:CONSTANTS().MOVE_PER_TICK
-  elseif direction == "right" then
+    self.x = self.x - self.pace
+  elseif self.direction == "right" then
     if self.x == self:CONSTANTS().MAX_X - (self:CONSTANTS().MOVEMENT * 2) then return end
-    self.x = self.x + self:CONSTANTS().MOVE_PER_TICK
-  elseif direction == "up" then
-    if self.y == self:CONSTANTS().MAX_Y then return end
-    self.y = self.y + self:CONSTANTS().MOVE_PER_TICK
+    self.x = self.x + self.pace
   end
 
-  -- Update the bug's movement
-  current_movement = current_movement + self:CONSTANTS().MOVE_PER_TICK
+  self:hit_min_max()
 
-  if current_movement % self:CONSTANTS().ANIMATION_DELAY == 0 then
-    current_frame = current_frame + 1
-    if current_frame == 3 then
-      current_frame = 1
-    end
-  end
+  self:update_current_frame(#self.moving_frames)
 
   -- If the current movement matches our constant value reset the bug
-  if current_movement % self:CONSTANTS().MOVEMENT == 0 then
+  if self.current_movement % (self:CONSTANTS().MOVEMENT * 2) == 0 then
     self:reset_movement()
   end
 end
 
--- Reset movement values for direction and animation checks
 function Alien:reset_movement()
-  current_movement = 0
-  direction = nil
-  moving = false
+  self.current_movement = 0
 end

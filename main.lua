@@ -1,21 +1,15 @@
 require("alien")
-require("scaffold")
-require("walls")
+require("player")
+require("building/tower")
 -- require("falling_object")
 
 function checkMovement()
   if love.keyboard.isDown("right") then
-    for i=1, #aliens do
-      aliens[i]:move_bug("right")
-    end
+    player:move("right")
   elseif love.keyboard.isDown("left") then
-    for i=1, #aliens do
-      aliens[i]:move_bug("left")
-    end
+    player:move("left")
   elseif love.keyboard.isDown("up") then
-    for i=1, #aliens do
-      aliens[i]:move_bug("up")
-    end
+    player:move("up")
   elseif love.keyboard.isDown("down") then
     y = y + 1
   elseif love.keyboard.isDown("q") then
@@ -23,37 +17,35 @@ function checkMovement()
   end
 end
 
-function recalculate_entites()
-
-end
-
 function love.load()
-  print("Height: ", love.window.getMode())
   aliens = {}
-  walls = Wall:new()
-  scaffold = Scaffold:new()
+  player = Player:new()
+  tower = Tower:new()
   y = 0
+
+  tower:load()
+  player:load_images()
+
   table.insert(aliens, Alien:new())
   for i=1, #aliens do
     aliens[i]:load_images()
+    aliens[i]:set_direction("right")
   end
-
-  bug_1 = love.graphics.newImage("images/bug-1.png")
 end
 
 function love.update()
   checkMovement()
+  player:update_player(1)
   for i=1, #aliens do
-    aliens[i]:update_bug()
+    aliens[i]:update_alien(.5)
   end
-  --recalculate_entities()
 end
 
 function love.draw()
-  for i=1, #aliens do
-    aliens[i]:draw_bug(bug_1)
-  end
+  tower:draw()
+  player:draw()
 
-  walls:draw_walls()
-  scaffold:draw_scaffold()
+  for i=1, #aliens do
+    aliens[i]:draw()
+  end
 end
