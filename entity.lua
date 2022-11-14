@@ -1,6 +1,6 @@
 Entity = {
   x = 80,
-  y = 80,
+  y = 160,
   moving = false,
   level = 0,
   movement_type = "straight"
@@ -24,8 +24,9 @@ end
 function Entity:move(dir)
   -- Only accept new movement if we aren't currently moving
   if self.moving == false then
+    block_player_movement = true
     -- Flip the moving bit and set the direction
-    self.moving = self.moving and false or true
+    self.moving = true
     self.direction = dir
     if self.direction == "up" then
       self.climbing = true
@@ -59,6 +60,7 @@ function Entity:reset_movement()
   self.direction = nil
   self.moving = false
   self.climbing = false
+  block_player_movement = false
 end
 
 function Entity:flip_direction()

@@ -28,6 +28,13 @@ function Alien:load_images()
   self.movement_type = "straight"
 end
 
+function Alien:scroll()
+  self.scroll_alien = true
+  self.current_movement = 0
+  self.z = 0
+end
+
+
 function Alien:update_alien(tick_modifier)
   self.pace = self:CONSTANTS().MOVE_PER_TICK * tick_modifier
 
@@ -38,6 +45,15 @@ function Alien:update_alien(tick_modifier)
   elseif self.direction == "right" then
     if self.x == self:CONSTANTS().MAX_X - (self:CONSTANTS().MOVEMENT * 2) then return end
     self.x = self.x + self.pace
+  end
+
+  if self.scroll_alien == true then
+    print("Z: ", self.z)
+    print("CM: ", self.current_movement)
+
+    if self.scroll_alien == true then
+      self.y = self.y + self.pace * 2
+    end
   end
 
   self:hit_min_max()
@@ -52,4 +68,5 @@ end
 
 function Alien:reset_movement()
   self.current_movement = 0
+  self.scroll_alien = false
 end

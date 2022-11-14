@@ -13,7 +13,7 @@ function Player:load_images()
   table.insert(self.climbing_frames, love.graphics.newImage("images/climbing-b.png"))
   table.insert(self.climbing_frames, love.graphics.newImage("images/climbing-c.png"))
   table.insert(self.climbing_frames, love.graphics.newImage("images/climbing-b.png"))
-  self.y = self.y + self:CONSTANTS().MOVEMENT * 2
+  self.y = self.y + self:CONSTANTS().MOVEMENT * 8
   self.current_frame = 1
   self.current_movement = 0
   self.moving = false
@@ -36,9 +36,6 @@ function Player:update_player(tick_modifier)
   elseif self.direction == "right" then
     if self.x == self:CONSTANTS().MAX_X - (self:CONSTANTS().MOVEMENT * 2) then return end
     self.x = self.x + self.pace
-  elseif self.direction == "up" then
-    if self.y == self:CONSTANTS().MAX_Y then return end
-    self.y = self.y - self.pace
   end
 
   self:update_current_frame(#self.moving_frames)

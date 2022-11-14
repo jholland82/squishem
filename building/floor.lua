@@ -9,23 +9,36 @@ function Floor:new (o)
   return o
 end
 
-function Floor:load()
+function Floor:load(row)
   self.tiles = {}
   for i = 1, 8 do
     table.insert(self.tiles, Scaffold:new())
   end
 
-  self:load_tiles()
+  self:load_tiles(row)
 end
 
-function Floor:load_tiles()
+function Floor:load_tiles(row)
   for i = 1, #self.tiles do
-    self.tiles[i]:random_tile()
+    self.tiles[i]:random_tile(i, row)
   end
 end
 
 function Floor:draw_tiles(y)
   for i = 1, #self.tiles do
-    self.tiles[i]:draw(i * 80, y * 80)
+    self.tiles[i]:draw()
+  end
+end
+
+function Floor:scroll_floor()
+  for i = 1, #self.tiles do
+    self.tiles[i]:move("up")
+    self.tiles[i]:scroll()
+  end
+end
+
+function Floor:update_floor()
+  for i = 1, #self.tiles do
+    self.tiles[i]:scroll()
   end
 end
