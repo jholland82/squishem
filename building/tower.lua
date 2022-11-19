@@ -15,7 +15,7 @@ function Tower:load()
   self.floors = {}
   self.moving = false
 
-  for i = 1, 8 do
+  for i = 1, LEVEL_HEIGHT do
     table.insert(self.floors, Floor:new())
   end
 
@@ -42,7 +42,35 @@ function Tower:update()
 end
 
 function Tower:move_player_up()
-  for i = 1, #self.floors do
-    self.floors[i]:scroll_floor()
+  if self:can_climb() then
+    for i = 1, #self.floors do
+      self.floors[i]:scroll_floor()
+    end
+
+    return true
   end
+
+  return false
+end
+
+function Tower:can_climb()
+  for i = 1, #self.floors do
+    for index, data in pairs(self.floors[i]) do
+      for key, value in pairs(self.floors[i][index]) do
+        if self:player_alignment_to_climb(value) then
+          return true
+        end
+      end
+    end
+  end
+
+  return false
+end
+
+function Tower:player_alignment_to_climb(value)
+  if value.x == player.x and value.y == player.y - 80 and value.climbable then
+    return true
+  end
+
+  return false
 end

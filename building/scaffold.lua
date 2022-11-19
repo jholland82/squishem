@@ -6,7 +6,7 @@ function Scaffold:load(x, y)
   self.direction = nil
   self.climbing = false
   self.x = (x * self:CONSTANTS().MOVEMENT * 2)
-  self.y = (y * self:CONSTANTS().MOVEMENT * 2)
+  self.y = ((y - LEVEL_HEIGHT + 7) * self:CONSTANTS().MOVEMENT * 2)
 end
 
 function Scaffold:draw(x, y)
@@ -18,9 +18,11 @@ function Scaffold:random_tile(x, y)
   if random == 0 then
     self.type = 0
     self.sprite = love.graphics.newImage("images/single-scaffold.png")
+    self.climbable = false
   else
     self.type = 1
     self.sprite = love.graphics.newImage("images/multi-scaffold.png")
+    self.climbable = true
   end
 
   self:load(x, y)

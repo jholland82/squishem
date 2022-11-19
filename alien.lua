@@ -48,9 +48,6 @@ function Alien:update_alien(tick_modifier)
   end
 
   if self.scroll_alien == true then
-    print("Z: ", self.z)
-    print("CM: ", self.current_movement)
-
     if self.scroll_alien == true then
       self.y = self.y + self.pace * 2
     end

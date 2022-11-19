@@ -3,6 +3,8 @@ require("player")
 require("building/tower")
 -- require("falling_object")
 
+LEVEL_HEIGHT = 40
+
 function checkMovement()
   if block_player_movement == false then
     if love.keyboard.isDown("right") then
@@ -10,11 +12,12 @@ function checkMovement()
     elseif love.keyboard.isDown("left") then
       player:move("left")
     elseif love.keyboard.isDown("up") then
-      tower:move_player_up()
-      for i=1, #aliens do
-        aliens[i]:scroll()
+      if tower:move_player_up() then
+        for i=1, #aliens do
+          aliens[i]:scroll()
+        end
+        player:move("up")
       end
-      player:move("up")
     elseif love.keyboard.isDown("down") then
       y = y + 1
     elseif love.keyboard.isDown("q") then
